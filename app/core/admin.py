@@ -47,3 +47,4 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(models.User, UserAdmin)
 # For recipe use the default admin.
 admin.site.register(models.Recipe)
+admin.site.register(models.Tag)
