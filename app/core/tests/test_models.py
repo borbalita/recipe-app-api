@@ -1,8 +1,8 @@
 """
 Tests for models.
 """
-
 from decimal import Decimal
+from unittest.mock import patch
 
 from core import models
 from django.contrib.auth import get_user_model
@@ -73,3 +73,19 @@ class ModelTests(TestCase):
         tag = models.Tag.objects.create(user=user, name='Tag1')
 
         self.assertEqual(str(tag), tag.name)
+
+    def test_create_ingredient(self):
+        user = create_user()
+        ingredient = models.Ingredient.objects.create(user=user, name='Ingredient1')
+
+        self.assertEqual(str(ingredient), ingredient.name)
+
+    # uuid4 is a function that generates a unique identifier
+    @patch('core.models.uuid.uuid4')
+    def test_generate_recipe_file_model_uuid(self, mock_uuid):
+        """Test generating image path."""
+        uuid = 'test-image-unique-identifier'
+        mock_uuid.return_value = uuid
+        file_path = models.generate_recipe_image_file_path(None, 'example.jpg')
+
+        self.assertEqual(file_path, f'uploads/recipe/{uuid}.jpg')
